@@ -28,34 +28,34 @@ public class ProductController {
 
     private final ProductRepository productRepository;
 
-    @PostMapping("/employees")
-    public Product addEmployee(@RequestBody Product product) {
+    @PostMapping("/product")
+    public Product addProduct(@RequestBody Product product) {
 
         return productRepository.save(product);
     }
 
 
-    @GetMapping("/employees")
-    public ResponseEntity<List<Product>> getAllEmployees() {
+    @GetMapping("/product")
+    public ResponseEntity<List<Product>> getAllProduct() {
         return ResponseEntity.ok(productRepository.findAll());
     }
 
-    @GetMapping("employees/{employeeId}")
-    @Cacheable(value = "employees", key = "#employeeId")
-    public Product findEmployeeById(@PathVariable(value = "employeeId") Integer employeeId) {
-        System.out.println("Employee fetching from database:: " + employeeId);
-        return productRepository.findById(employeeId).orElseThrow(
-                () -> new ResouceNotFoundException("Employee not found" + employeeId));
+    @GetMapping("product/{productId}")
+    @Cacheable(value = "product", key = "#productId")
+    public Product findProductById(@PathVariable(value = "productId") Integer productId) {
+        System.out.println("Product fetching from database:: " + productId);
+        return productRepository.findById(productId).orElseThrow(
+                () -> new ResouceNotFoundException("product not found" + productId));
 
     }
 
 
-    @PutMapping("employees/{employeeId}")
-    @CachePut(value = "employees", key = "#employeeId")
-    public Product updateEmployee(@PathVariable(value = "employeeId") Integer employeeId,
+    @PutMapping("product/{productId}")
+    @CachePut(value = "product", key = "#productId")
+    public Product updateEmployee(@PathVariable(value = "productId") Integer employeeId,
                                   @RequestBody Product productDetails) {
         Product product = productRepository.findById(employeeId)
-                .orElseThrow(() -> new ResouceNotFoundException("Employee not found for this id :: " + employeeId));
+                .orElseThrow(() -> new ResouceNotFoundException("Product not found for this id :: " + employeeId));
         product.setName(productDetails.getName());
         final Product updatedProduct = productRepository.save(product);
         return updatedProduct;
@@ -63,11 +63,11 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("employees/{id}")
-    @CacheEvict(value = "employees", allEntries = true)
-    public void deleteEmployee(@PathVariable(value = "id") Integer employeeId) {
+    @DeleteMapping("product/{id}")
+    @CacheEvict(value = "product", allEntries = true)
+    public void deleteProduct(@PathVariable(value = "id") Integer employeeId) {
         Product product = productRepository.findById(employeeId).orElseThrow(
-                () -> new ResouceNotFoundException("Employee not found" + employeeId));
+                () -> new ResouceNotFoundException("Product not found" + employeeId));
         productRepository.delete(product);
     }
 }
